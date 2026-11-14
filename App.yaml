@@ -1,0 +1,16 @@
+
+kind: wasmer.io/App.v0
+name: antarasa
+owner: benyl110
+package: .
+
+scaling:
+  mode: single_concurrency
+
+capabilities:
+  database:
+    engine: mysql
+
+locality:
+  regions:
+    - fr-roub1
