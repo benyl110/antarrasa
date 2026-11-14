@@ -1,4 +1,3 @@
-
 kind: wasmer.io/App.v0
 name: antarasa
 owner: benyl110
@@ -14,3 +13,7 @@ capabilities:
 locality:
   regions:
     - fr-roub1
+
+volumes:
+  - name: uploads
+    mount: /app/storage/app
