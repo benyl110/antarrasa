@@ -4,8 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#fffaf1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="AntarRasa">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>AntarRasa — Cerita baik, dari dapur sekitar</title>
     <link rel="icon" type="image/jpeg" href="{{ asset('images/antarasa-logo.jpg') }}">
+    <link rel="manifest" href="{{ asset('manifest.webmanifest') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/antarasa-apple-touch-icon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/antarasa.css') }}">
 </head>
 <body class="landing">
@@ -55,5 +60,6 @@
         </section>
     </main>
     <footer class="landing-footer wrap"><span>© {{ date('Y') }} AntarRasa</span><span>Rasa dekat, cerita hangat.</span></footer>
+    <script src="{{ asset('js/antarasa.js') }}" defer></script>
 </body>
 </html>

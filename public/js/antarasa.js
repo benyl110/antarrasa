@@ -1,4 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/service-worker.js').catch((error) => {
+            console.error('Service worker AntarRasa gagal didaftarkan:', error);
+        });
+    }
+
     const deliveryFields = document.querySelector('.delivery-fields');
     const deliveryOptions = document.querySelectorAll('input[name="delivery_method"]');
 

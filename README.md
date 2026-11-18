@@ -24,15 +24,14 @@ AntarRasa is a responsive Laravel application for local food businesses and cust
    DB_PASSWORD=
    ```
 
-4. Run the migrations, publish the public upload link, and start Laravel:
+4. Run the migrations and start Laravel:
 
    ```powershell
    php artisan migrate
-   php artisan storage:link
    php artisan serve
    ```
 
-   The Blade views and public CSS/JavaScript do not require npm or a frontend build.
+   The Blade views and public CSS/JavaScript do not require npm or a frontend build. Public uploads are served by Laravel at `/uploads/`.
 
 ## Account onboarding
 
@@ -50,6 +49,12 @@ AntarRasa is a responsive Laravel application for local food businesses and cust
   ```
 
   The Mitra must change this temporary password after the first sign-in. Do not pass real passwords as command-line options, because shell history may retain them.
+
+## PWA and Wasmer deployment
+
+- The application can be installed from its HTTPS Wasmer URL as a Progressive Web App (PWA). Set the Wasmer `APP_URL` environment variable to `https://antarrasa.wasmer.app` so uploaded-file URLs point to the Wasmer application.
+- `App.yaml` mounts `/app/storage/app` as a persistent volume. Store logos and product photos are served by Laravel at `/uploads/` from the public disk, so the Wasmer deployment does not depend on committing the ignored `public/storage` symlink or conflict with Laravel's signed `/storage/` URLs.
+- Android users can install AntarRasa from the browser menu. On iPhone, open the site in Safari, select **Share**, then **Add to Home Screen**. Ordering and account features require an internet connection.
 
 ## MVP behavior
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\PublicImageController;
 use App\Http\Controllers\StorefrontController;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +15,10 @@ Route::get('/', function () {
 
     return view('welcome');
 })->name('home');
+
+Route::get('/uploads/{path}', PublicImageController::class)
+    ->where('path', '.*')
+    ->name('uploads.public');
 
 Route::get('/masuk/{role}', [AuthController::class, 'showLogin'])->whereIn('role', ['mitra', 'konsumen'])->name('login');
 Route::post('/masuk/{role}', [AuthController::class, 'login'])->middleware('throttle:8,1')->whereIn('role', ['mitra', 'konsumen'])->name('login.store');

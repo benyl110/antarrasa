@@ -24,6 +24,7 @@ class AntarasaFlowTest extends TestCase
             ->assertSee('Untuk Mitra')
             ->assertSee('/masuk/konsumen', false)
             ->assertSee('/masuk/mitra', false)
+            ->assertSee('manifest.webmanifest')
             ->assertDontSee('Owner');
 
         $this->assertSame(0, User::count());
@@ -192,6 +193,48 @@ class AntarasaFlowTest extends TestCase
         $this->assertSame('rejected', $order->fresh()->payment_status);
     }
 
+    public function test_uploaded_store_logos_and_product_photos_are_served_from_public_storage(): void
+    {
+        Storage::fake('public');
+        [$partner, $store] = $this->createShop();
+
+        $this->actingAs($partner)->put(route('partner.store.update'), [
+            'store_name' => $store->store_name,
+            'phone' => $partner->phone,
+            'address' => 'Jalan Melati 10',
+            'logo' => UploadedFile::fake()->image('logo.png'),
+        ])->assertRedirect();
+
+        $store->refresh();
+        $this->assertNotNull($store->logo_path);
+        $this->get('/uploads/'.$store->logo_path)
+            ->assertOk()
+            ->assertHeader('content-type', 'image/png');
+
+        $this->post(route('partner.products.store'), [
+            'name' => 'Menu bergambar',
+            'description' => 'Menu uji gambar.',
+            'price' => 12000,
+            'stock_qty' => 5,
+            'availability_status' => 'available',
+            'image' => UploadedFile::fake()->image('menu.png'),
+        ])->assertRedirect(route('partner.products'));
+
+        $product = $store->products()->where('name', 'Menu bergambar')->firstOrFail();
+        $this->assertNotNull($product->image_path);
+        $this->get('/uploads/'.$product->image_path)
+            ->assertOk()
+            ->assertHeader('content-type', 'image/png');
+    }
+
+    public function test_public_storage_does_not_expose_files_outside_store_and_product_uploads(): void
+    {
+        Storage::fake('public');
+        Storage::disk('public')->put('private/secret.jpg', 'private content');
+
+        $this->get('/uploads/private/secret.jpg')->assertNotFound();
+    }
+
     public function test_a_mitra_cannot_view_another_mitras_order(): void
     {
         [$partner, $store, $product, $consumer] = $this->createShop();
@@ -247,7 +290,9 @@ class AntarasaFlowTest extends TestCase
             'line_total' => $product->price,
         ]);
 
-        $this->actingAs($consumer)->get(route('consumer.home'))->assertOk();
+        $this->actingAs($consumer)->get(route('consumer.home'))
+            ->assertOk()
+            ->assertSee('manifest.webmanifest');
         $this->get(route('consumer.store', $store))->assertOk();
         $this->withSession(['cart' => ['store_id' => $store->id, 'items' => [$product->id => 1]]])
             ->get(route('checkout'))->assertOk();

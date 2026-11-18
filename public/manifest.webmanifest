@@ -1,0 +1,23 @@
+{
+    "id": "/",
+    "name": "AntarRasa - Rasa lokal, dekat di hati",
+    "short_name": "AntarRasa",
+    "description": "Pesan hidangan favorit dari UMKM kuliner di sekitarmu.",
+    "start_url": "/",
+    "scope": "/",
+    "display": "standalone",
+    "background_color": "#fffaf1",
+    "theme_color": "#fffaf1",
+    "icons": [
+        {
+            "src": "/images/antarasa-icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/images/antarasa-icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
